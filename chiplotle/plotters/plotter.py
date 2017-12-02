@@ -31,6 +31,7 @@ class Plotter(_DrawingPlotter):
             'IP',
             'IW',
             'LB',
+            'LO',
             'LT',
             'OA',
             'OC',
