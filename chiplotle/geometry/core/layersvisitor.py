@@ -1,5 +1,8 @@
 from chiplotle.core.visitor import Visitor
+from autologging import logged, traced
 
+@traced
+@logged
 class LayersVisitor(Visitor):
     '''Sorts / splits shapes based on the layers they live in.'''
 

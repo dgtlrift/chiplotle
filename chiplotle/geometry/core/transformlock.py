@@ -1,7 +1,10 @@
 from chiplotle.geometry.core.group import Group
 from chiplotle.tools.mathtools.rotate_2d import rotate_coordinate_2d
 from chiplotle.tools.geometrytools.scale import scale
+from autologging import logged, traced
 
+@traced
+@logged
 class TransformLock(Group):
 
    def __init__(self, shapes, lock_transforms):

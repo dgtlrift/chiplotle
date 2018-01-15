@@ -2,7 +2,10 @@ from chiplotle.core.visitor import Visitor
 from chiplotle.tools.hpgltools import convert_coordinates_to_hpgl_absolute_path
 import chiplotle.hpgl.commands as hpgl
 import copy
+from autologging import logged, traced
 
+@traced
+@logged
 class HPGLFormatVisitor(Visitor):
     '''Visitor that collects shapes and returns their HPGL representation.'''
 

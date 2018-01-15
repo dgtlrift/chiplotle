@@ -1,5 +1,8 @@
 from chiplotle.geometry.core.group import Group
+from autologging import logged, traced
 
+@traced
+@logged
 class Layer(Group):
 
     def __init__(self, shapes, name):

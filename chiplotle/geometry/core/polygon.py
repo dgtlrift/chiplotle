@@ -3,7 +3,10 @@ from chiplotle.geometry.core.coordinatearray import CoordinateArray
 from chiplotle.geometry.core.path import Path
 from chiplotle.tools.hpgltools.convert_coordinates_to_hpgl_absolute_path \
     import convert_coordinates_to_hpgl_absolute_path
+from autologging import logged, traced
 
+@traced
+@logged
 class Polygon(Path):
     '''A closed path.'''
 

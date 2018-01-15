@@ -1,7 +1,9 @@
 import operator
 import math
+from autologging import logged, traced
 
-
+@traced
+@logged
 class Coordinate(object):
 
     __slots__ = ('_coords')

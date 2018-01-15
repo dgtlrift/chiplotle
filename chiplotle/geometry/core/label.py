@@ -3,11 +3,13 @@ from chiplotle.hpgl.commands import PA
 from chiplotle.geometry.core.coordinatearray import CoordinateArray
 from chiplotle.geometry.core.shape import _Shape
 from chiplotle.tools import mathtools
+from autologging import logged, traced
 import math
-
 
 ## TODO should a Label be a path? Probably not.
 
+@traced
+@logged
 class Label(_Shape):
     '''
     A text label.

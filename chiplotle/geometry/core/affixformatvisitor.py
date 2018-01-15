@@ -1,6 +1,8 @@
 from chiplotle.core.visitor import Visitor
+from autologging import logged, traced
 
-
+@traced
+@logged
 class AffixFormatVisitor(Visitor):
     '''Hard-sets formatters defined in Groups onto the drawable _Shapes.
         This cannot be undone!

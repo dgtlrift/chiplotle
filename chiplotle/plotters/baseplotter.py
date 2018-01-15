@@ -10,19 +10,21 @@ from chiplotle.geometry.core.shape import _Shape
 from chiplotle.geometry.core.coordinate import Coordinate
 from chiplotle.hpgl import commands
 from chiplotle.hpgl.abstract.hpgl import _HPGL
-from chiplotle.tools.logtools.get_logger import get_logger
 from chiplotle.tools.serialtools import VirtualSerialPort
+from autologging import logged, traced
 import math
 import re
 import serial
 import time
 import types
+import logging
 
-
+@traced
+@logged
 class _BasePlotter(object):
    def __init__(self, serial_port):
       self.type = '_BasePlotter'
-      self._logger = get_logger(self.__class__.__name__)
+      self._logger = logging.getLogger(self.__class__.__name__)
       self._serial_port = serial_port
       self._hpgl = commands
       self._margins = MarginsInterface(self)

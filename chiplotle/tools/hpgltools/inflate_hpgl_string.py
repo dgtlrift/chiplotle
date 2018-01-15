@@ -1,8 +1,10 @@
 from chiplotle.hpgl import commands as hpgl
 from chiplotle.tools.hpgltools.parse_hpgl_string import parse_hpgl_string
-from chiplotle.tools.logtools.apply_logger import apply_logger
 from chiplotle.tools.iterabletools.flat_list_to_pairs import flat_list_to_pairs
+from autologging import logged, traced
 
+@traced
+@logged
 def inflate_hpgl_string(string, filter_commands=None):
     '''Reads a text string and "inflates" it by creating
     Chiplotle-HPGL class instances of the found HPGL commands.
@@ -42,7 +44,8 @@ def inflate_hpgl_string(string, filter_commands=None):
             result.append(command)
     return result
 
-@apply_logger
+@traced
+@logged
 def inflate_hpgl_string_command(cmd_string):
     '''Converts a string representing a single HPGL command into a
     Chiplotle HPGL instance.
@@ -55,8 +58,10 @@ def inflate_hpgl_string_command(cmd_string):
     except:
         msg = 'Could not create %s(%s)...' % (head, body)
         msg += ' The command is either malformed or unrecognized.'
-        inflate_hpgl_string_command.logger.warning(msg)
+        self.__log.warning(msg)
 
+@traced
+@logged
 def _parse_hpgl_command_string(cmd_string):
     '''Parses a single hpgl command string.
     Splits it in two: the head and the body.

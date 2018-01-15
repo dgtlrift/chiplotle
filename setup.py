@@ -15,7 +15,7 @@ setup(name              = 'Chiplotle',
 
       include_package_data = True,
       packages             = ['chiplotle'],
-      install_requires     = ['pyserial<=3', 'numpy<=2'],
+      install_requires     = ['pyserial<=3', 'numpy<=2', 'autologging'],
       entry_points         = {'console_scripts':
          ['chiplotle = chiplotle.core.cfg._run_chiplotle:_run_chiplotle',]},
       scripts              = [

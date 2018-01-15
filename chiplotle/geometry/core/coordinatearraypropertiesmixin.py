@@ -1,6 +1,9 @@
 from chiplotle.geometry.core.coordinate import Coordinate
 import numpy as np
+from autologging import logged, traced
 
+@traced
+@logged
 class CoordinateArrayPropertiesMixin(object):
 
     @property

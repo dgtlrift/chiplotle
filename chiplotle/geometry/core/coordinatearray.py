@@ -2,7 +2,10 @@ from chiplotle.geometry.core.coordinate import Coordinate
 from chiplotle.geometry.core.coordinatearraypropertiesmixin import \
     CoordinateArrayPropertiesMixin
 import numpy as np
+from autologging import logged, traced
 
+@traced
+@logged
 class CoordinateArray(CoordinateArrayPropertiesMixin):
 
     __slots__ = ('_data', )

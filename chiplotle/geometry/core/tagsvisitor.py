@@ -1,6 +1,9 @@
 from chiplotle.core.visitor import Visitor
+from autologging import logged, traced
 
 
+@traced
+@logged
 class TagsVisitor(Visitor):
     '''Sort / group shapes by tags.'''
 

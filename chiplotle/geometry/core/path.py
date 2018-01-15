@@ -1,7 +1,10 @@
 from chiplotle.geometry.core.shape import _Shape
 from chiplotle.geometry.core.coordinatearray import CoordinateArray
+from autologging import logged, traced
 
 
+@traced
+@logged
 class Path(_Shape):
     '''
         A generic path (connected points).

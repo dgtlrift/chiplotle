@@ -1,7 +1,10 @@
 from chiplotle.geometry.core.coordinatearray import CoordinateArray
 from chiplotle.geometry.core.shape import _Shape
 import copy
+from autologging import logged, traced
 
+@traced
+@logged
 class Group(_Shape):
     '''A group collects together multiple _Shapes, so they
     can be treated as a single object.

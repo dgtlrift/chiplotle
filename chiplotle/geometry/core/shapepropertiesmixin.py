@@ -1,5 +1,8 @@
 from chiplotle.geometry.core.coordinate import Coordinate
+from autologging import logged, traced
 
+@traced
+@logged
 class _ShapePropertiesMixin(object):
 
     ## TODO:  cache computed values?
