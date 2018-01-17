@@ -9,6 +9,15 @@ from chiplotle.geometry.core.coordinate import Coordinate
 
 class _DrawingPlotter(_BasePlotter):
 
+   HPGL_PEN_MAP = {
+      'pen-off'    : 0,
+      'pen-for'    : 1,
+      'pen-red'    : 2,
+      'pen-green'  : 3,
+      'pen-blue'   : 4,
+      'pen-cyan'   : 5,
+      'pen-magenta': 6,
+      'pen-yellow' : 7}
 
    ## motion ##
 
@@ -71,6 +80,8 @@ class _DrawingPlotter(_BasePlotter):
       self.write(self._hpgl.PU(coords))
 
    def select_pen(self, penNum = 0):
+      if penNum < 0 or penNum > 7:
+	penNum = self.HPGL_PEN_MAP[penNum]
       self.write(self._hpgl.SP(penNum))
 
 
