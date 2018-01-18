@@ -51,7 +51,7 @@ class Label(_Shape):
         self.charspace = charspace
         self.linespace = linespace
         self.origin = origin
-
+        self.__log.debug( "origin %s" % origin)
         self.points = [(0, 0), (charwidth, 0), (charwidth, charheight)]
 
         self.never_upside_down = False
@@ -84,30 +84,47 @@ class Label(_Shape):
 
     ## PRIVATE PROPERTIES ##
 
-#   @property
-#   def _infix_commands(self):
-#      angle = self.angle
-#      if self.never_upside_down:
-#         if math.pi * 3 / 2.0 > angle > math.pi / 2.0:
-#            angle += math.pi
-#
-#      if _Shape.language == 'HPGL':
-#         origin = self.HPGL_ORIGIN_MAP[self.origin]
-#         label = HPGLLabel(
-#            text = self.text,
-#            charwidth = self.charwidth,
-#            charheight = self.charheight,
-#            charspace = self.charspace,
-#            linespace = self.linespace,
-#            origin = origin,
-#            direction = mathtools.polar_to_xy((1, angle)),
-#            )
-#         return [PA(self.points[0]), label]
-#
-#      elif _Shape.language == 'gcode':
-#         print 'Sorry, no g-code support!'
-#         raise NotImplementedError
+    @property
+    def _infix_commands(self):
+       angle = self.angle
+       if self.never_upside_down:
+          if math.pi * 3 / 2.0 > angle > math.pi / 2.0:
+             angle += math.pi
 
+       if _Shape.language == 'HPGL':
+          origin = self.HPGL_ORIGIN_MAP[self.origin]
+          self.__log.debug( "origin %s" % origin )
+          label = HPGLLabel(
+             text = self.text,
+             charwidth = self.charwidth,
+             charheight = self.charheight,
+             charspace = self.charspace,
+             linespace = self.linespace,
+             origin = origin,
+             direction = mathtools.polar_to_xy((1, angle)),
+             )
+          return [PA(self.points[0]), label]
+
+       elif _Shape.language == 'gcode':
+          self.__log.warning( 'Sorry, no g-code support!' )
+          raise NotImplementedError
+
+
+    def cat(self,
+        text,
+        charwidth,
+        charheight,
+        charspace = None,
+        linespace = None,
+        origin = 'bottom-left'):
+
+        self.text += text
+        self.charspace = charspace
+        self.linespace = linespace
+        self.origin = origin
+        self.__log.debug( "origin %s" % origin)
+        self.points = [(0, 0), (charwidth, 0), (charwidth, charheight)]
+        return(self)	
 
     def __str__(self):
         return '%s(%s)' % (self.__class__.__name__, self.text)
@@ -116,12 +133,80 @@ class Label(_Shape):
 
 if __name__ == '__main__':
     from chiplotle import *
+    from chiplotle.hpgl.formatters import Pen
+    from autologging import TRACE
+    import logging
+    import sys
 
-    lb = Label("Hello!", 1, 2, origin = 'bottom-center')
-    PenDecorator(Pen(1))(lb) ## we need this for Label to display with hp2xx
+    logging.basicConfig(level=TRACE, stream=sys.stdout,
+       format="%(levelname)s:%(name)s:%(funcName)s:%(message)s")
 
-    rotate(lb, 3.14 / 4 * 3)
+    pl = instantiate_virtual_plotter()
+    pl.margins.soft.draw_outline()
+
+    lbtc = Label("Hello!", 1, 2, origin = 'bottom-center')
+    Pen(1)(lbtc) ## we need this for Label to display with hp2xx
+
+    rotate(lbtc, 3.14 / 4 * 3)
+
+    lbbl = Label("Bot-Left!", 1, 2, origin = 'bottom-left')
+    Pen(2)(lbbl) ## we need this for Label to display with hp2xx
+ 
+    lbml = Label("Mid-Left!", 1, 2, origin = 'middle-left')
+    Pen(3)(lbml) ## we need this for Label to display with hp2xx
+ 
+    lbtl = Label("Top-Left!", 1, 2, origin = 'top-left')
+    Pen(4)(lbtl) ## we need this for Label to display with hp2xx
+ 
+    lbbc = Label("Bot-Cent!", 1, 2, origin = 'bottom-center')
+    Pen(5)(lbbc) ## we need this for Label to display with hp2xx
+ 
+    lbmc = Label("Mid-Cent!", 1, 2, origin = 'middle-center')
+    Pen(6)(lbmc) ## we need this for Label to display with hp2xx
+ 
+    lbbr = Label("Bot-Right!", 1, 2, origin = 'bottom-right')
+    Pen(7)(lbbr) ## we need this for Label to display with hp2xx
+ 
+    lbmr = Label("Mid-Right!", 1, 2, origin = 'middle-right')
+    Pen(1)(lbmr) ## we need this for Label to display with hp2xx
+ 
+    lbtr = Label("Top-Right!", 1, 2, origin = 'top-right')
+    Pen(2)(lbtr) ## we need this for Label to display with hp2xx
+
+    lbcat = Label("Bot-Cent!\n\r", 1, 2, origin = 'bottom-center')
+    #Pen(1)(lbtc) ## we need this for Label to display with hp2xx
+
+    lbcat = lbcat.cat("Bot-Left!\n\r", 1, 2, origin = 'bottom-left')
+    #Pen(2)(lbbl) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Mid-Left!\n\r", 1, 2, origin = 'middle-left')
+    #Pen(3)(lbml) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Top-Left!\n\r", 1, 2, origin = 'top-left')
+    #Pen(4)(lbtl) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Bot-Cent!\n\r", 1, 2, origin = 'bottom-center')
+    #Pen(5)(lbbc) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Mid-Cent!\n\r", 1, 2, origin = 'middle-center')
+    #Pen(6)(lbmc) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Bot-Right!\n\r", 1, 2, origin = 'bottom-right')
+    #Pen(7)(lbbr) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Mid-Right!\n\r", 1, 2, origin = 'middle-right')
+    #Pen(1)(lbmr) ## we need this for Label to display with hp2xx
+ 
+    lbcat = lbcat.cat("Top-Right!\n\r", 1, 2, origin = 'top-right')
+    #Pen(2)(lbtr) ## we need this for Label to display with hp2xx
+
+    rotate(lbcat, 3.14 / 4 * 3)
+
     c = circle(100 / 2.5)
-    g = group([c, lb])
-    io.view(g)
+    g = group([c, lbtc, lbbl, lbml, lbtl, lbbc, lbmc, lbbr, lbmr, lbtr, lbcat])
+
+    center_at(g, [100,100])
+
+    pl.write(g)
+    io.view(pl)
 

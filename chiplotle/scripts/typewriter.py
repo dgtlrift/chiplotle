@@ -1,5 +1,9 @@
-#!/usr/bin/env python
+#!/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python
 from chiplotle import *
+from chiplotle.hpgl.commands import LB
+from autologging import TRACE, logged, traced
+import logging
+import sys
 
 ## HELPER FUNCTIONS ##
 
@@ -9,24 +13,33 @@ def _query_font_size( ):
     return char_width, char_height
 
 def _query_pen( ):
-    pen_num = int(raw_input("which pen? "))
+    pen_num = raw_input("which pen? ")
+    if not pen_num:
+       pen_num = 1
+    pen_num = int(pen_num)
     return pen_num
 
 
 ## MAIN FUNCTION ##
 
+@traced
+@logged
 def typewriter( ):
+    logging.basicConfig(level=TRACE, stream=sys.stdout,
+     format="%(levelname)s:%(name)s:%(funcName)s:%(message)s")
     print("***************************")
     print("* CHIPLOTLE TYPEWRITER!!! *")
     print("***************************")
     print("")
 
-    plotter = instantiate_plotters( )[0]
+#    plotter = instantiate_plotters( )[0]
+    plotter = instantiate_virtual_plotter( )
 
     pen_num = _query_pen( )
 
     set_size = raw_input("set font size (y/N)? ")
 
+    cw = ch = 1
     if set_size.lower( ) == "y":
         cw, ch = _query_font_size( )
         plotter.write(SI(cw, ch))
@@ -40,6 +53,8 @@ def typewriter( ):
     print("")
 
     finished = False
+
+    growingLabel = None
 
     while finished == False:
         line = raw_input(">>> ")
@@ -58,10 +73,12 @@ def typewriter( ):
             elif response == "q":
                 finished = True
             else:
-                plotter.write(LB("\n\r"))
+                growingLabel = labelCat(growingLabel, "\n\r", cw, ch)
         else:
-            plotter.write(LB(line + "\n\r"))
+            growingLabel = labelCat(growingLabel, line + "\n\r", cw, ch)
 
+    plotter.write(growingLabel)
+    io.view(plotter)
     print("l8r.")
 
 
